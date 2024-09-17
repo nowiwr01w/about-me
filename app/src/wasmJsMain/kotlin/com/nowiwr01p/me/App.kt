@@ -49,8 +49,7 @@ private fun HeaderWithPhotoAndContacts() {
     Text(
         text = "Andrey Larionov | Android Developer",
         color = colorAccent,
-        style = AppTypography.h1,
-        modifier = Modifier.padding(top = 24.dp)
+        style = AppTypography.h1
     )
 }
 
@@ -60,7 +59,7 @@ private fun ContactsRow() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(top = 24.dp)
+            .padding(vertical = 14.dp)
             .fillMaxWidth()
     ) {
         ContactItem(
@@ -97,7 +96,7 @@ private fun ContactItem(
         Text(
             text = text,
             color = colorText,
-            style = AppTypography.h3,
+            style = AppTypography.h4,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 18.dp)
         )
     }

@@ -5,125 +5,105 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 val AppTypography @Composable get() = Typography(
     h1 = TextStyle(
-        // Пример: "Добро пожаловать на мой сайт"
-        color = Color(0xFFBB86FC), // rgb(187, 134, 252)
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.ExtraBold, // 700
-        fontSize = 36.sp, // 32px
-        lineHeight = 36.sp, // 57.599998px
-        textAlign = TextAlign.Center
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 36.sp,
+        lineHeight = 36.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     h2 = TextStyle(
-        // Пример: "Обо мне"
-        color = Color(0xFFE0E0E0), // rgb(224, 224, 224)
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.SemiBold, // 600
-        fontSize = 24.sp, // Примерный размер
-        lineHeight = 24.sp, // Примерный размер
-        textAlign = TextAlign.Center
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     h3 = TextStyle(
-        // Пример: "Мои навыки"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Medium, // 500
+        fontWeight = FontWeight.Medium,
         fontSize = 20.sp,
-        lineHeight = 28.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 20.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     h4 = TextStyle(
-        // Пример: "Проекты"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
-        lineHeight = 24.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 18.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     h5 = TextStyle(
-        // Пример: "Контакты"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        lineHeight = 20.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 16.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     h6 = TextStyle(
-        // Пример: "Дополнительная информация"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Normal, // 400
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        lineHeight = 18.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 14.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     subtitle1 = TextStyle(
-        // Пример: "Подзаголовок раздела"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
-        lineHeight = 24.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 18.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     subtitle2 = TextStyle(
-        // Пример: "Вторичный подзаголовок"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        lineHeight = 20.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 16.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     body1 = TextStyle(
-        // Пример: "Основной текст"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp, // Соответствует предыдущим стилям
-        lineHeight = 32.4.sp, // 32.400002px
-        textAlign = TextAlign.Justify
+        fontSize = 18.sp,
+        lineHeight = 18.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     body2 = TextStyle(
-        // Пример: "Малый текст"
-        color = Color(0xFFE0E0E0),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
-        textAlign = TextAlign.Justify
+        lineHeight = 16.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     button = TextStyle(
-        // Пример: "Кнопка"
-        color = Color(0xFFBB86FC),
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Bold, // 700
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
-        textAlign = TextAlign.Center
+        lineHeight = 16.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     caption = TextStyle(
-        // Пример: "Подпись"
-        color = Color(0xFFBB86FC),
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Medium, // 500
+        fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        lineHeight = 20.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 14.sp,
+        lineHeightStyle = lineHeightStyle
     ),
     overline = TextStyle(
-        // Пример: "Сверхстрочный текст"
-        color = Color(0xFFBB86FC),
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
-        lineHeight = 16.sp,
-        textAlign = TextAlign.Start
+        lineHeight = 12.sp,
+        lineHeightStyle = lineHeightStyle
     )
+)
+
+private val lineHeightStyle get() = LineHeightStyle(
+    trim = LineHeightStyle.Trim.None,
+    alignment = LineHeightStyle.Alignment.Center
 )
