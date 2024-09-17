@@ -51,6 +51,7 @@ kotlin {
                  */
                 implementation(libs.koin)
                 implementation(libs.koin.compose)
+                implementation(libs.coroutines)
                 implementation(libs.compose.constraintLayout)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)

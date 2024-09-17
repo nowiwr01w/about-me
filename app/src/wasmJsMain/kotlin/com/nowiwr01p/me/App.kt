@@ -14,6 +14,8 @@ import com.nowiwr01p.me.core_ui.theme.AppTypography
 import com.nowiwr01p.me.core_ui.theme.colorAccent
 import com.nowiwr01p.me.core_ui.theme.colorBackground
 import com.nowiwr01p.me.core_ui.theme.colorText
+import com.nowiwr01p.me.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun AboutMeContent() {
@@ -60,22 +62,22 @@ private fun ContactsRow() {
             .fillMaxWidth()
     ) {
         ContactItem(
-            text = "EMAIL"
+            text = stringResource(Res.string.contact_email).uppercase()
         )
         ContactItem(
-            text = "LINKEDIN"
+            text = stringResource(Res.string.contact_linkedin).uppercase()
         )
         ContactItem(
-            text = "MEDIUM"
+            text = stringResource(Res.string.contact_github).uppercase()
         )
         ContactItem(
-            text = "LEETCODE"
+            text = stringResource(Res.string.contact_medium).uppercase()
         )
         ContactItem(
-            text = "TELEGRAM"
+            text = stringResource(Res.string.contact_leetcode).uppercase()
         )
         ContactItem(
-            text = "WHATSAPP"
+            text = stringResource(Res.string.contact_telegram).uppercase()
         )
     }
 }
