@@ -1,4 +1,4 @@
-package com.nowiwr01p.me.model
+package com.nowiwr01p.me.shared
 
 import org.jetbrains.compose.resources.StringResource
 

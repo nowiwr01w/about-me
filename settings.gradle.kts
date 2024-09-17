@@ -29,7 +29,12 @@ dependencyResolutionManagement {
 }
 
 include(":app")
-include(":server")
-include(":resources")
-include(":model")
 include(":app:domain")
+include(":app:data")
+include(":app:core-ui")
+
+include(":resources")
+
+include(":shared")
+
+include(":server")

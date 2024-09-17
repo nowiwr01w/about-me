@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -30,17 +29,26 @@ kotlin {
     sourceSets {
         val wasmJsMain by getting {
             dependencies {
-                implementation(projects.model)
+                /**
+                 * PROJECT MODULES
+                 */
+                implementation(projects.app.coreUi)
                 implementation(projects.app.domain)
+                implementation(projects.shared)
                 implementation(projects.resources)
-                implementation(libs.compose.constraintLayout)
-
+                /**
+                 * COMPOSE
+                 */
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.ui)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
+                /**
+                 * DEPENDENCIES
+                 */
+                implementation(libs.compose.constraintLayout)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)
             }
