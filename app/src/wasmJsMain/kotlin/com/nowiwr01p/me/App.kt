@@ -108,7 +108,7 @@ private fun ContactItem(
 @Composable
 private fun Divider() = Box(
     modifier = Modifier
-        .padding(top = 32.dp)
+        .padding(vertical = 32.dp)
         .fillMaxWidth()
         .clip(RoundedCornerShape(16.dp))
         .height(1.dp)
