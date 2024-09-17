@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
-internal val AppTypography @Composable get() = Typography(
+val AppTypography @Composable get() = Typography(
     h1 = TextStyle(
         // Пример: "Добро пожаловать на мой сайт"
         color = Color(0xFFBB86FC), // rgb(187, 134, 252)

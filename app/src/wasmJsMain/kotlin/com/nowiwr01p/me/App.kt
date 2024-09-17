@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,16 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ChainStyle
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import com.nowiwr01p.me.core_ui.components.AppImage
 import com.nowiwr01p.me.core_ui.theme.AppTypography
 import com.nowiwr01p.me.core_ui.theme.colorAccent
 import com.nowiwr01p.me.core_ui.theme.colorBackground
 import com.nowiwr01p.me.core_ui.theme.colorText
-import com.nowiwr01p.me.resources.Res
-import com.nowiwr01p.me.resources.avatar
 
 @Composable
 internal fun AboutMeContent() {
