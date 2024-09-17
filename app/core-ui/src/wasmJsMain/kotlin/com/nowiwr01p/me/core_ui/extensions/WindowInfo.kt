@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun getScreenWidth() = rememberUpdatedState(
+fun getScreenWidth() = rememberUpdatedState(
     newValue = with(LocalDensity.current) {
         LocalWindowInfo.current.containerSize.width.dp / density
     }
@@ -17,7 +17,7 @@ internal fun getScreenWidth() = rememberUpdatedState(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun getScreenHeight() = rememberUpdatedState(
+fun getScreenHeight() = rememberUpdatedState(
     newValue = with(LocalDensity.current) {
         LocalWindowInfo.current.containerSize.height.dp / density
     }
