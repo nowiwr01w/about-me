@@ -9,10 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
-import com.nowiwr01p.me.core_ui.extensions.getScreenWidth
 import com.nowiwr01p.me.core_ui.theme.AppTypography
 import com.nowiwr01p.me.core_ui.theme.colorAccent
 import com.nowiwr01p.me.core_ui.theme.colorBackground

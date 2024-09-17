@@ -38,3 +38,4 @@ include(":resources")
 include(":shared")
 
 include(":server")
+include(":app:data:di")

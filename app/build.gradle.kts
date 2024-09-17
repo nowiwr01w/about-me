@@ -34,6 +34,7 @@ kotlin {
                  */
                 implementation(projects.app.coreUi)
                 implementation(projects.app.domain)
+                implementation(projects.app.data.di)
                 implementation(projects.shared)
                 implementation(projects.resources)
                 /**
@@ -48,6 +49,8 @@ kotlin {
                 /**
                  * DEPENDENCIES
                  */
+                implementation(libs.koin)
+                implementation(libs.koin.compose)
                 implementation(libs.compose.constraintLayout)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)

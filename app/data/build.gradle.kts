@@ -20,7 +20,15 @@ kotlin {
     sourceSets {
         val wasmJsMain by getting {
             dependencies {
+                /**
+                 * PROJECT MODULES
+                 */
                 implementation(projects.app.domain)
+                implementation(projects.shared)
+                implementation(projects.resources)
+                /**
+                 * COMPOSE
+                 */
                 implementation(compose.runtime)
             }
         }

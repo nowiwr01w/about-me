@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- APP NAME -->
+    <string name="site_name">Andrey Larionov</string>
+
+    <!-- CONTACTS -->
+    <string name="contact_github" translatable="false">Github</string>
+    <string name="contact_linkedin" translatable="false">LinkedIn</string>
+    <string name="contact_medium" translatable="false">Medium</string>
+    <string name="contact_leetcode" translatable="false">Leetcode</string>
+    <string name="contact_telegram" translatable="false">Telegram</string>
+    <string name="contact_email" translatable="false">Email</string>
+
+</resources>
