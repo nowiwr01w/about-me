@@ -1,9 +1,14 @@
 package com.nowiwr01p.me.di
 
-import com.nowiwr01p.me.data.di.moduleData
+import com.nowiwr01p.me.ui.HomeViewModel
+import kotlinx.coroutines.CoroutineScope
+import org.koin.dsl.module
 
-private val modulesApp = listOf(
-    moduleData
-)
-
-internal val appModules = modulesApp
+internal val moduleApp = module {
+    /**
+     * HOME
+     */
+    single { (scope: CoroutineScope) ->
+        HomeViewModel(scope)
+    }
+}

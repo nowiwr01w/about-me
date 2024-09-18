@@ -1,12 +1,12 @@
-package com.nowiwr01p.me.base
+package com.nowiwr01p.me.base.view_model
 
-import androidx.compose.runtime.State as ComposeState
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import com.nowiwr01p.me.base.state.BaseEffect
+import com.nowiwr01p.me.base.state.BaseEvent
+import com.nowiwr01p.me.base.state.BaseState
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -16,18 +16,22 @@ abstract class BaseViewModel<Event: BaseEvent, State: BaseState, Effect: BaseEff
     private val mutex = Mutex()
     private val dispatcher = Dispatchers.Default
 
+
     /**
      * STATE
      */
-    private val _viewState by lazy { mutableStateOf(initialState) }
-    val viewState by lazy<ComposeState<State>> { _viewState }
+    private val viewState = MutableStateFlow(this.setInitialState())
 
-    private val initialState by lazy { setInitialState() }
     abstract fun setInitialState(): State
 
+    @Composable
+    fun withState() = viewState.collectAsState().value
+
+    suspend fun getState() = mutex.withLock { viewState }
+
     protected suspend fun setState(reducer: State.() -> State) = mutex.withLock {
-        val newState = _viewState.value.reducer()
-        _viewState.value = newState
+        val newState = viewState.value.reducer()
+        viewState.value = newState
     }
 
     /**
@@ -50,11 +54,11 @@ abstract class BaseViewModel<Event: BaseEvent, State: BaseState, Effect: BaseEff
     /**
      * EFFECT
      */
-    private val _effect = Channel<Effect>()
-    val effect = _effect.receiveAsFlow()
+    private val _effect = MutableSharedFlow<Effect>()
+    val effect = _effect.asSharedFlow()
 
     protected fun setEffect(builder: () -> Effect) = coroutineScope.launch(dispatcher) {
-        _effect.send(builder())
+        _effect.emit(builder())
     }
 
     /**
@@ -65,7 +69,7 @@ abstract class BaseViewModel<Event: BaseEvent, State: BaseState, Effect: BaseEff
     ): Job {
         return coroutineScope.launch(dispatcher) { block() }
     }
-    
+
     fun BaseViewModel<*, *, *>.io(
         handler: CoroutineExceptionHandler,
         block: suspend CoroutineScope.() -> Unit
