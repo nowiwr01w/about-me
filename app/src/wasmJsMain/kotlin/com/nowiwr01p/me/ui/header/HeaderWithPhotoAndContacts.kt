@@ -12,21 +12,31 @@ import androidx.compose.ui.unit.dp
 import com.nowiwr01p.me.core_ui.theme.AppTypography
 import com.nowiwr01p.me.core_ui.theme.colorAccent
 import com.nowiwr01p.me.core_ui.theme.colorText
-import com.nowiwr01p.me.resources.*
+import com.nowiwr01p.me.shared.ContactData
+import com.nowiwr01p.me.ui.HomeContract.Listener
+import com.nowiwr01p.me.ui.HomeContract.State
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun HeaderWithPhotoAndContacts() {
-    ContactsRow()
-    Text(
-        text = "Andrey Larionov | Android Developer",
-        color = colorAccent,
-        style = AppTypography.h1
+internal fun HeaderWithPhotoAndContacts(
+    state: State,
+    listener: Listener?
+) {
+    ContactsRow(
+        state = state,
+        listener = listener
     )
+    NameAndPosition()
 }
 
+/**
+ * CONTACTS ROW
+ */
 @Composable
-private fun ContactsRow() {
+private fun ContactsRow(
+    state: State,
+    listener: Listener?
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -34,42 +44,43 @@ private fun ContactsRow() {
             .padding(vertical = 14.dp)
             .fillMaxWidth()
     ) {
-        ContactItem(
-            text = stringResource(Res.string.contact_email).uppercase()
-        )
-        ContactItem(
-            text = stringResource(Res.string.contact_linkedin).uppercase()
-        )
-        ContactItem(
-            text = stringResource(Res.string.contact_github).uppercase()
-        )
-        ContactItem(
-            text = stringResource(Res.string.contact_medium).uppercase()
-        )
-        ContactItem(
-            text = stringResource(Res.string.contact_leetcode).uppercase()
-        )
-        ContactItem(
-            text = stringResource(Res.string.contact_telegram).uppercase()
-        )
+        state.contacts.forEach { contact ->
+            ContactItem(
+                contact = contact,
+                onContactClick = { listener?.onContactClick(contact) }
+            )
+        }
     }
 }
 
 @Composable
 private fun ContactItem(
-    text: String
+    contact: ContactData,
+    onContactClick: () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
-            .clickable {  }
+            .clickable { onContactClick() }
     ) {
         Text(
-            text = text,
+            text = stringResource(contact.name).uppercase(),
             color = colorText,
             style = AppTypography.h4,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 18.dp)
         )
     }
+}
+
+/**
+ * NAME AND POSITION
+ */
+ @Composable
+private fun NameAndPosition() {
+    Text(
+        text = "Andrey Larionov | Android Developer",
+        color = colorAccent,
+        style = AppTypography.h1
+    )
 }

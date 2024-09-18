@@ -3,43 +3,32 @@ package com.nowiwr01p.me.shared
 import com.nowiwr01p.me.resources.*
 import org.jetbrains.compose.resources.StringResource
 
-interface ContactDomain {
-    val name: StringResource
+sealed class ContactData(
+    val name: StringResource,
     val redirectUrl: String
-}
-
-sealed class ContactDomainLocal(
-    override val name: StringResource,
-    override val redirectUrl: String
-): ContactDomain {
-
-    data object Email : ContactDomainLocal(
+) {
+    data object Email : ContactData(
         name = Res.string.contact_email,
         redirectUrl = "https://google.com"
     )
-    data object LinkedIn : ContactDomainLocal(
+    data object LinkedIn : ContactData(
         name = Res.string.contact_linkedin,
         redirectUrl = "https://google.com"
     )
-    data object Github : ContactDomainLocal(
+    data object Github : ContactData(
         name = Res.string.contact_github,
         redirectUrl = "https://google.com"
     )
-    data object Medium : ContactDomainLocal(
+    data object Medium : ContactData(
         name = Res.string.contact_medium,
         redirectUrl = "https://google.com"
     )
-    data object LeetCode : ContactDomainLocal(
+    data object LeetCode : ContactData(
         name = Res.string.contact_leetcode,
         redirectUrl = "https://google.com"
     )
-    data object Telegram : ContactDomainLocal(
+    data object Telegram : ContactData(
         name = Res.string.contact_telegram,
         redirectUrl = "https://google.com"
     )
 }
-
-class ContactDomainRemote(
-    override val name: StringResource,
-    override val redirectUrl: String
-): ContactDomain

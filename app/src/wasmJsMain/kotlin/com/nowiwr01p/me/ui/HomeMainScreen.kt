@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nowiwr01p.me.core_ui.theme.colorBackground
+import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
 import com.nowiwr01p.me.ui.divider.Divider
 import com.nowiwr01p.me.ui.header.HeaderWithPhotoAndContacts
@@ -19,11 +20,13 @@ internal fun HomeMainScreen(
     viewModel: HomeViewModel = rememberViewModel()
 ) {
     val listener = object : Listener {
+        override fun onContactClick(contact: ContactData) {
 
+        }
     }
 
     LaunchedEffect(Unit) {
-//        viewModel.setEvent(Event.Init)
+        viewModel.setEvent(Event.Init)
     }
 
     Box(
@@ -33,7 +36,7 @@ internal fun HomeMainScreen(
             .background(colorBackground)
     ) {
         Content(
-            state = State(),
+            state = viewModel.withState(),
             listener = listener
         )
     }
@@ -50,7 +53,10 @@ private fun Content(
             .widthIn(max = 900.dp)
             .fillMaxHeight()
     ) {
-        HeaderWithPhotoAndContacts()
+        HeaderWithPhotoAndContacts(
+            state = state,
+            listener = listener
+        )
         Divider()
     }
 }
