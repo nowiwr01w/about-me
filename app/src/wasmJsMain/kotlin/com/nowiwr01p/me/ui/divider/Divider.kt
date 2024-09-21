@@ -9,13 +9,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.nowiwr01p.me.core_ui.theme.colorText
 
 @Composable
-internal fun Divider() = Box(
+internal fun Divider(topPadding: Dp) = Box(
     modifier = Modifier
-        .padding(vertical = 32.dp)
+        .padding(top = topPadding)
         .fillMaxWidth()
         .clip(RoundedCornerShape(16.dp))
         .height(1.dp)

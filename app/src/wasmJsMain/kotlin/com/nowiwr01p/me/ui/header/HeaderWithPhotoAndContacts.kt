@@ -22,18 +22,19 @@ internal fun HeaderWithPhotoAndContacts(
     state: State,
     listener: Listener?
 ) {
-    ContactsRow(
+    Contacts(
         state = state,
         listener = listener
     )
-    NameAndPosition()
+    NamePosition()
+    LocationTimezone()
 }
 
 /**
  * CONTACTS ROW
  */
 @Composable
-private fun ContactsRow(
+private fun Contacts(
     state: State,
     listener: Listener?
 ) {
@@ -77,10 +78,23 @@ private fun ContactItem(
  * NAME AND POSITION
  */
  @Composable
-private fun NameAndPosition() {
+private fun NamePosition() {
     Text(
         text = "Andrey Larionov | Android Developer",
         color = colorAccent,
         style = AppTypography.h1
+    )
+}
+
+/**
+ * LOCATION AND TIMEZONE INFO
+ */
+ @Composable
+private fun LocationTimezone() {
+    Text(
+        text = "UTC+4 | Georgia, Tbilisi | GMT+4",
+        color = colorText,
+        style = AppTypography.h5,
+        modifier = Modifier.padding(top = 24.dp)
     )
 }

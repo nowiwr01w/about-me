@@ -57,7 +57,7 @@ private fun Content(
             state = state,
             listener = listener
         )
-        Divider()
+        Divider(topPadding = 32.dp)
     }
 }
 
