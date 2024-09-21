@@ -19,9 +19,9 @@ val AppTypography @Composable get() = Typography(
     ),
     h2 = TextStyle(
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 24.sp,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 28.sp,
+        lineHeight = 28.sp,
         lineHeightStyle = lineHeightStyle
     ),
     h3 = TextStyle(

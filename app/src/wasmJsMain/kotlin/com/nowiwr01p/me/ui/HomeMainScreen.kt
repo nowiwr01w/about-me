@@ -10,6 +10,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +21,7 @@ import com.nowiwr01p.me.core_ui.theme.colorBackground
 import com.nowiwr01p.me.core_ui.theme.colorText
 import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import rememberViewModel
@@ -67,6 +70,8 @@ private fun Content(
         )
         Divider()
         Description()
+        Divider()
+        Education()
         Divider()
     }
 }
@@ -160,14 +165,84 @@ private fun LocationTimezone() {
 private fun Description() {
     Text(
         text = """
-        Hi, I’m an Android Developer with 6 years of experience and a degree in Computer Science. I build modern, efficient apps using tools like Jetpack Compose, Coroutines, DataStore, and WorkManager.
-        I’m currently exploring KMM to create cross-platform apps for Android, iOS, Desktop, and Web. I can also set up a Ktor server, integrate it with Postgres, and deploy it to hosting.
+        Hi, I’m an Android Developer with 6 years of experience. I build modern, efficient apps using tools like Jetpack Compose, Coroutines, DataStore and WorkManager.
+        I’m currently exploring KMM to create cross-platform apps for Android, iOS, Desktop and Web. I can also set up a Ktor server, integrate it with Postgres and deploy it to hosting.
         I’m passionate about the TON ecosystem and am interested in writing smart contracts as part of my exploration in blockchain development.
         """.trimIndent(),
         color = colorText,
         style = AppTypography.h3.copy(lineHeight = 32.sp),
-        modifier = Modifier.padding(top = 24.dp)
+        modifier = Modifier.padding(top = 32.dp)
     )
+}
+
+/**
+ * EDUCATION
+ */
+@Composable
+private fun Education() {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        SectionTitle(
+            text = "Education"
+        )
+        CompanyNameWithStartEndDates(
+            companyName = "ITMO University, Russia",
+            startDate = "Sep 2018",
+            endDate = "March 2022"
+        )
+        Text(
+            text = "Applied Mathematics and Computer Science",
+            color = colorText.copy(alpha = 0.5f),
+            style = AppTypography.h5.copy(fontWeight = FontWeight.Normal),
+            modifier = Modifier.padding(top = 12.dp)
+        )
+    }
+}
+
+/**
+ * SECTION TITLE
+ */
+@Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text = text,
+        color = colorAccent,
+        style = AppTypography.h2,
+        textAlign = TextAlign.Start,
+        modifier = Modifier
+            .padding(top = 32.dp, bottom = 24.dp)
+            .fillMaxWidth()
+    )
+}
+
+/**
+ * COMPANY NAME AND ENROLLED DATES
+ */
+@Composable
+private fun CompanyNameWithStartEndDates(
+    companyName: String,
+    startDate: String,
+    endDate: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = companyName,
+            color = colorText,
+            style = AppTypography.h3
+        )
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
+        Text(
+            text = "$startDate - $endDate",
+            color = colorText,
+            style = AppTypography.h3
+        )
+    }
 }
 
 /**
