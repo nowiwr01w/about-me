@@ -25,10 +25,13 @@ import com.nowiwr01p.me.core_ui.theme.params.colorText
 import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
 import com.nowiwr01p.me.ui.data.WorkExperience
-import com.nowiwr01p.me.ui.data.agc_soft.AgcSoft
-import com.nowiwr01p.me.ui.data.firreteli_ltd.FirreteliLtd
-import com.nowiwr01p.me.ui.data.lifehacker.LifeHacker
-import com.nowiwr01p.me.ui.data.point_pay.PointPay
+import com.nowiwr01p.me.ui.data.work_experience.agc_soft.AgcSoft
+import com.nowiwr01p.me.ui.data.work_experience.firreteli_ltd.FirreteliLtd
+import com.nowiwr01p.me.ui.data.work_experience.lifehacker.LifeHacker
+import com.nowiwr01p.me.ui.data.work_experience.point_pay.PointPay
+import com.nowiwr01p.me.ui.data.tech_stack.TechStackData
+import com.nowiwr01p.me.ui.data.tech_stack.techProficiences
+import com.nowiwr01p.me.ui.data.workExperienceItems
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import rememberViewModel
@@ -80,6 +83,8 @@ private fun Content(
         Description()
         Divider()
         Education()
+        Divider()
+        TechStack()
         Divider()
         WorkExperience()
         Spacer(modifier = Modifier.height(48.dp))
@@ -210,7 +215,7 @@ private fun Education() {
                 modifier = Modifier.weight(1f)
             )
             Text(
-                text = "09.2018 - 03.2022",
+                text = "2018 - 2022",
                 color = colorText,
                 style = MaterialTheme.typography.h4
             )
@@ -225,6 +230,47 @@ private fun Education() {
 }
 
 /**
+ * TECH STACK
+ */
+@Composable
+private fun TechStack() {
+    Column {
+        SectionTitle("Technical proficienses")
+        techProficiences.forEachIndexed { index, data ->
+            TechStackItem(data)
+            if (index != techProficiences.lastIndex) {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun TechStackItem(data: TechStackData) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top
+    ) {
+        Text(
+            text = data.category,
+            color = colorText,
+            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.ExtraBold),
+            modifier = Modifier.weight(1f)
+        )
+        Text(
+            text = data.skills,
+            color = colorText,
+            style = MaterialTheme.typography.body1.copy(
+                lineHeight = 32.sp,
+                lineHeightStyle = null,
+                fontWeight = FontWeight.Normal
+            ),
+            modifier = Modifier.weight(5f)
+        )
+    }
+}
+
+/**
  * WORK EXPERIENCE
  */
 @Composable
@@ -233,13 +279,12 @@ private fun WorkExperience() {
         modifier = Modifier.fillMaxWidth()
     ) {
         SectionTitle("Work experience")
-        WorkItem(AgcSoft)
-        Spacer(modifier = Modifier.height(48.dp))
-        WorkItem(FirreteliLtd)
-        Spacer(modifier = Modifier.height(48.dp))
-        WorkItem(PointPay)
-        Spacer(modifier = Modifier.height(48.dp))
-        WorkItem(LifeHacker)
+        workExperienceItems.forEachIndexed { index, data ->
+            WorkItem(data)
+            if (index != workExperienceItems.lastIndex) {
+                Spacer(modifier = Modifier.height(48.dp))
+            }
+        }
     }
 }
 

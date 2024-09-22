@@ -1,4 +1,4 @@
-package com.nowiwr01p.me.ui.data.point_pay
+package com.nowiwr01p.me.ui.data.work_experience.point_pay
 
 import com.nowiwr01p.me.ui.data.CompanyInfo
 import com.nowiwr01p.me.ui.data.Dates

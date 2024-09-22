@@ -1,4 +1,4 @@
-package com.nowiwr01p.me.ui.data.firreteli_ltd
+package com.nowiwr01p.me.ui.data.work_experience.firreteli_ltd
 
 import com.nowiwr01p.me.ui.data.CompanyInfo
 import com.nowiwr01p.me.ui.data.Dates

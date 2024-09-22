@@ -1,4 +1,4 @@
-package com.nowiwr01p.me.ui.data.agc_soft
+package com.nowiwr01p.me.ui.data.work_experience.agc_soft
 
 import com.nowiwr01p.me.ui.data.CompanyInfo
 import com.nowiwr01p.me.ui.data.Dates

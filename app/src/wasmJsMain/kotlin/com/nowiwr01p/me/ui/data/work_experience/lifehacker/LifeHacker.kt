@@ -1,4 +1,4 @@
-package com.nowiwr01p.me.ui.data.lifehacker
+package com.nowiwr01p.me.ui.data.work_experience.lifehacker
 
 import com.nowiwr01p.me.ui.data.CompanyInfo
 import com.nowiwr01p.me.ui.data.Dates
