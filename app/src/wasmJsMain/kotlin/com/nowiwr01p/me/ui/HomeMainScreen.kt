@@ -26,6 +26,9 @@ import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
 import com.nowiwr01p.me.ui.data.WorkExperience
 import com.nowiwr01p.me.ui.data.agc_soft.AgcSoft
+import com.nowiwr01p.me.ui.data.firreteli_ltd.FirreteliLtd
+import com.nowiwr01p.me.ui.data.lifehacker.LifeHacker
+import com.nowiwr01p.me.ui.data.point_pay.PointPay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import rememberViewModel
@@ -232,9 +235,11 @@ private fun WorkExperience() {
         SectionTitle("Work experience")
         WorkItem(AgcSoft)
         Spacer(modifier = Modifier.height(48.dp))
-        WorkItem(AgcSoft)
+        WorkItem(FirreteliLtd)
         Spacer(modifier = Modifier.height(48.dp))
-        WorkItem(AgcSoft)
+        WorkItem(PointPay)
+        Spacer(modifier = Modifier.height(48.dp))
+        WorkItem(LifeHacker)
     }
 }
 
@@ -265,7 +270,7 @@ private fun WorkItem(workExperience: WorkExperience) {
                 style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp)
             )
             if (index != workExperience.projectInfo.tasks.lastIndex) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
         Text(
