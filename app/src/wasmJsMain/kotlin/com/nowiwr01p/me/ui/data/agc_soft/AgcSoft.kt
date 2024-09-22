@@ -28,6 +28,5 @@ private val projectInfo = ProjectInfo(
         "Refactored the game and game providers screen",
         "Parallelized API requests on the main application screen, reducing shimmer display time",
         "Added an animated FAB component and implemented show/hide logic for various screens"
-    ),
-    stack = "Kotlin, Jetpack Compose, MVI, Clean Architecture, Coroutines, Koin, Retrofit2, Paging3"
+    )
 )

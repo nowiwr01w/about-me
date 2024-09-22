@@ -13,8 +13,7 @@ data class CompanyInfo(
 data class ProjectInfo(
     val position: String,
     val enrolledDates: Dates,
-    val tasks: List<String>,
-    val stack: String
+    val tasks: List<String>
 )
 
 data class Dates(

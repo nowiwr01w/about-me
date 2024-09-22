@@ -21,7 +21,6 @@ data object PointPay : WorkExperience(
             "Covered each screen with Unit Tests",
             "Implemented several reusable components such as BottomSheet and animated SnackBar that can be used in any part of the application",
             "Collaborated with designers to create a new design system with beautiful animations and smooth transitions between screens. Implemented these animations using the Lottie library and built-in Jetpack Compose tools, and added smooth transitions with the Jetpack Navigation Component"
-        ),
-        stack = "Kotlin, Jetpack Compose, MVI, Clean Architecture, Coroutines, Koin, Retrofit2, Room, Paging3"
+        )
     )
 )

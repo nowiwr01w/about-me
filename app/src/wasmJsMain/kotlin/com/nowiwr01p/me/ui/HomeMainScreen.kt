@@ -261,7 +261,7 @@ private fun WorkItem(workExperience: WorkExperience) {
             text = workExperience.companyInfo.description,
             color = colorText,
             style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
-            modifier = Modifier.padding(top = 16.dp, bottom = 20.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         )
         workExperience.projectInfo.tasks.forEachIndexed { index, task ->
             Text(
@@ -273,12 +273,6 @@ private fun WorkItem(workExperience: WorkExperience) {
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }
-        Text(
-            text = "Stack: ${workExperience.projectInfo.stack}",
-            color = colorText,
-            style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
-            modifier = Modifier.padding(top = 20.dp)
-        )
     }
 }
 

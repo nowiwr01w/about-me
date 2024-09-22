@@ -23,7 +23,6 @@ data object LifeHacker : WorkExperience(
             "Introduced a dynamic font feature throughout the entire app",
             "Implemented multiple new features such as 'folders', 'save favorite articles', 'best of the month'",
             "Set up Gitlab CI/CD for a project from scratch that can check code style, compile multiple builds (.aab & .apk) for different build variants and send them to Slack"
-        ),
-        stack = "Kotlin, MVVM, Clean Architecture, Coroutines, Koin, Retrofit2, Realm, Firebase, AppMetrica Analytics"
+        )
     )
 )

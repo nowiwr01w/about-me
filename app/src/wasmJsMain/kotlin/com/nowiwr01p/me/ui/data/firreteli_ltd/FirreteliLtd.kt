@@ -21,7 +21,6 @@ data object FirreteliLtd : WorkExperience(
             "Implemented local data and HTTP Body custom encryption",
             "Integrated in-app subscription using Google Play Billing",
             "Added support for multiple VPN protocols"
-        ),
-        stack = "Kotlin, Jetpack Compose, MVI, Clean Architecture, Coroutines, Koin, Retrofit2, DataStore"
+        )
     )
 )
