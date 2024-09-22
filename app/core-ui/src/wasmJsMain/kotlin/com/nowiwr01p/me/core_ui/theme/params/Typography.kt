@@ -1,12 +1,10 @@
-package com.nowiwr01p.me.core_ui.theme
+package com.nowiwr01p.me.core_ui.theme.params
 
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 val AppTypography @Composable get() = Typography(
@@ -27,15 +25,15 @@ val AppTypography @Composable get() = Typography(
     h3 = TextStyle(
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Medium,
-        fontSize = 20.sp,
-        lineHeight = 20.sp,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
         lineHeightStyle = lineHeightStyle
     ),
     h4 = TextStyle(
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
-        lineHeight = 18.sp,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        lineHeight = 20.sp,
         lineHeightStyle = lineHeightStyle
     ),
     h5 = TextStyle(
@@ -48,36 +46,36 @@ val AppTypography @Composable get() = Typography(
     h6 = TextStyle(
         fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 14.sp,
-        lineHeightStyle = lineHeightStyle
-    ),
-    subtitle1 = TextStyle(
-        fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
-        lineHeight = 18.sp,
-        lineHeightStyle = lineHeightStyle
-    ),
-    subtitle2 = TextStyle(
-        fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 16.sp,
+        fontSize = 12.sp,
+        lineHeight = 12.sp,
         lineHeightStyle = lineHeightStyle
     ),
     body1 = TextStyle(
         fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
         lineHeight = 18.sp,
         lineHeightStyle = lineHeightStyle
     ),
     body2 = TextStyle(
         fontFamily = JetBrainsMono,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 14.sp,
+        lineHeightStyle = lineHeightStyle
+    ),
+    subtitle1 = TextStyle(
+        fontFamily = JetBrainsMono,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 16.sp,
+        fontSize = 18.sp,
+        lineHeight = 18.sp,
+        lineHeightStyle = lineHeightStyle
+    ),
+    subtitle2 = TextStyle(
+        fontFamily = JetBrainsMono,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 14.sp,
         lineHeightStyle = lineHeightStyle
     ),
     button = TextStyle(

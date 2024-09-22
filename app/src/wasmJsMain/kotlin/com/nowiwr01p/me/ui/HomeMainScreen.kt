@@ -3,25 +3,29 @@ package com.nowiwr01p.me.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nowiwr01p.me.core_ui.theme.AppTypography
-import com.nowiwr01p.me.core_ui.theme.colorAccent
-import com.nowiwr01p.me.core_ui.theme.colorBackground
-import com.nowiwr01p.me.core_ui.theme.colorText
+import com.nowiwr01p.me.core_ui.theme.params.colorAccent
+import com.nowiwr01p.me.core_ui.theme.params.colorBackground
+import com.nowiwr01p.me.core_ui.theme.params.colorText
 import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
-import org.jetbrains.compose.resources.StringResource
+import com.nowiwr01p.me.ui.data.WorkExperience
+import com.nowiwr01p.me.ui.data.agc_soft.AgcSoft
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import rememberViewModel
@@ -45,6 +49,7 @@ internal fun HomeMainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(colorBackground)
+            .verticalScroll(rememberScrollState())
     ) {
         Content(
             state = viewModel.withState(),
@@ -68,23 +73,25 @@ private fun Content(
             state = state,
             listener = listener
         )
-        Divider()
+        Divider(topPadding = 16.dp)
         Description()
         Divider()
         Education()
         Divider()
+        WorkExperience()
+        Spacer(modifier = Modifier.height(48.dp))
     }
 }
 
 @Composable
-internal fun HeaderWithPhotoAndContacts(
+private fun HeaderWithPhotoAndContacts(
     state: State,
     listener: Listener?
 ) {
-    Contacts(
-        state = state,
-        listener = listener
-    )
+//    Contacts(
+//        state = state,
+//        listener = listener
+//    )
     NamePosition()
     LocationTimezone()
 }
@@ -101,7 +108,7 @@ private fun Contacts(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(vertical = 14.dp)
+            .padding(vertical = 16.dp)
             .fillMaxWidth()
     ) {
         state.contacts.forEach { contact ->
@@ -127,7 +134,7 @@ private fun ContactItem(
         Text(
             text = stringResource(contact.name).uppercase(),
             color = colorText,
-            style = AppTypography.h4,
+            style = MaterialTheme.typography.h5,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 18.dp)
         )
     }
@@ -141,7 +148,8 @@ private fun NamePosition() {
     Text(
         text = "Andrey Larionov | Android Developer",
         color = colorAccent,
-        style = AppTypography.h1
+        style = MaterialTheme.typography.h1,
+        modifier = Modifier.padding(top = 32.dp)
     )
 }
 
@@ -153,8 +161,8 @@ private fun LocationTimezone() {
     Text(
         text = "UTC+4 | Georgia, Tbilisi | GMT+4",
         color = colorText,
-        style = AppTypography.h5,
-        modifier = Modifier.padding(top = 24.dp)
+        style = MaterialTheme.typography.h5,
+        modifier = Modifier.padding(top = 16.dp)
     )
 }
 
@@ -170,7 +178,7 @@ private fun Description() {
         I’m passionate about the TON ecosystem and am interested in writing smart contracts as part of my exploration in blockchain development.
         """.trimIndent(),
         color = colorText,
-        style = AppTypography.h3.copy(lineHeight = 32.sp),
+        style = MaterialTheme.typography.body1.copy(lineHeight = 28.sp),
         modifier = Modifier.padding(top = 32.dp)
     )
 }
@@ -186,16 +194,85 @@ private fun Education() {
         SectionTitle(
             text = "Education"
         )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "ITMO University, Russia",
+                color = colorText,
+                style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Medium)
+            )
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "09.2018 - 03.2022",
+                color = colorText,
+                style = MaterialTheme.typography.h4
+            )
+        }
+        Text(
+            text = "Applied Math and Computer Science",
+            color = colorText.copy(alpha = 0.5f),
+            style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Normal),
+            modifier = Modifier.padding(top = 12.dp)
+        )
+    }
+}
+
+/**
+ * WORK EXPERIENCE
+ */
+@Composable
+private fun WorkExperience() {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        SectionTitle("Work experience")
+        WorkItem(AgcSoft)
+        Spacer(modifier = Modifier.height(48.dp))
+        WorkItem(AgcSoft)
+        Spacer(modifier = Modifier.height(48.dp))
+        WorkItem(AgcSoft)
+    }
+}
+
+/**
+ * WORK ITEM
+ */
+@Composable
+private fun WorkItem(workExperience: WorkExperience) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         CompanyNameWithStartEndDates(
-            companyName = "ITMO University, Russia",
-            startDate = "Sep 2018",
-            endDate = "March 2022"
+            companyName = workExperience.companyInfo.name,
+            position = workExperience.projectInfo.position,
+            startDate = workExperience.projectInfo.enrolledDates.startDate,
+            endDate = workExperience.projectInfo.enrolledDates.endDate
         )
         Text(
-            text = "Applied Mathematics and Computer Science",
-            color = colorText.copy(alpha = 0.5f),
-            style = AppTypography.h5.copy(fontWeight = FontWeight.Normal),
-            modifier = Modifier.padding(top = 12.dp)
+            text = workExperience.companyInfo.description,
+            color = colorText,
+            style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
+            modifier = Modifier.padding(top = 16.dp, bottom = 20.dp)
+        )
+        workExperience.projectInfo.tasks.forEachIndexed { index, task ->
+            Text(
+                text = "- $task",
+                color = colorText,
+                style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp)
+            )
+            if (index != workExperience.projectInfo.tasks.lastIndex) {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+        Text(
+            text = "Stack: ${workExperience.projectInfo.stack}",
+            color = colorText,
+            style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
+            modifier = Modifier.padding(top = 20.dp)
         )
     }
 }
@@ -208,7 +285,7 @@ private fun SectionTitle(text: String) {
     Text(
         text = text,
         color = colorAccent,
-        style = AppTypography.h2,
+        style = MaterialTheme.typography.h2,
         textAlign = TextAlign.Start,
         modifier = Modifier
             .padding(top = 32.dp, bottom = 24.dp)
@@ -222,6 +299,7 @@ private fun SectionTitle(text: String) {
 @Composable
 private fun CompanyNameWithStartEndDates(
     companyName: String,
+    position: String? = null,
     startDate: String,
     endDate: String
 ) {
@@ -229,18 +307,36 @@ private fun CompanyNameWithStartEndDates(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = companyName,
-            color = colorText,
-            style = AppTypography.h3
-        )
+        Box(
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.medium)
+                .background(
+                    color = Color(0xFF5E2B9D),
+                    shape = MaterialTheme.shapes.medium
+                )
+        ) {
+            Text(
+                text = companyName,
+                color = colorText,
+                style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Medium),
+                modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp)
+            )
+        }
+        if (position != null) {
+            Text(
+                text = position,
+                color = colorText.copy(alpha = 0.5f),
+                style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Normal),
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
         Spacer(
             modifier = Modifier.weight(1f)
         )
         Text(
             text = "$startDate - $endDate",
             color = colorText,
-            style = AppTypography.h3
+            style = MaterialTheme.typography.h4
         )
     }
 }
@@ -249,9 +345,9 @@ private fun CompanyNameWithStartEndDates(
  * HORIZONTAL DIVIDER
  */
 @Composable
-internal fun Divider() = Box(
+internal fun Divider(topPadding: Dp = 32.dp) = Box(
     modifier = Modifier
-        .padding(top = 32.dp)
+        .padding(top = topPadding)
         .fillMaxWidth()
         .clip(RoundedCornerShape(16.dp))
         .height(1.dp)
