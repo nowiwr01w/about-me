@@ -282,15 +282,12 @@ private fun WorkExperience() {
         workExperienceItems.forEachIndexed { index, data ->
             WorkItem(data)
             if (index != workExperienceItems.lastIndex) {
-                Spacer(modifier = Modifier.height(48.dp))
+                WorkItemDivider()
             }
         }
     }
 }
 
-/**
- * WORK ITEM
- */
 @Composable
 private fun WorkItem(workExperience: WorkExperience) {
     Column(
@@ -321,21 +318,35 @@ private fun WorkItem(workExperience: WorkExperience) {
     }
 }
 
+@Composable
+private fun WorkItemDivider() = Box(
+    contentAlignment = Alignment.Center,
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(49.dp)
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(0.1f)
+            .height(1.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(colorText.copy(alpha = 0.2f))
+    )
+}
+
 /**
  * SECTION TITLE
  */
 @Composable
-private fun SectionTitle(text: String) {
-    Text(
-        text = text,
-        color = colorAccent,
-        style = MaterialTheme.typography.h2,
-        textAlign = TextAlign.Start,
-        modifier = Modifier
-            .padding(top = 32.dp, bottom = 24.dp)
-            .fillMaxWidth()
-    )
-}
+private fun SectionTitle(text: String) = Text(
+    text = text,
+    color = colorAccent,
+    style = MaterialTheme.typography.h2,
+    textAlign = TextAlign.Start,
+    modifier = Modifier
+        .padding(top = 32.dp, bottom = 24.dp)
+        .fillMaxWidth()
+)
 
 /**
  * COMPANY NAME AND ENROLLED DATES
