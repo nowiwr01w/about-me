@@ -21,14 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nowiwr01p.me.core_ui.theme.params.colorAccent
 import com.nowiwr01p.me.core_ui.theme.params.colorBackground
+import com.nowiwr01p.me.core_ui.theme.params.colorLink
 import com.nowiwr01p.me.core_ui.theme.params.colorText
 import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
+import com.nowiwr01p.me.ui.data.Details
 import com.nowiwr01p.me.ui.data.WorkExperience
-import com.nowiwr01p.me.ui.data.work_experience.agc_soft.AgcSoft
-import com.nowiwr01p.me.ui.data.work_experience.firreteli_ltd.FirreteliLtd
-import com.nowiwr01p.me.ui.data.work_experience.lifehacker.LifeHacker
-import com.nowiwr01p.me.ui.data.work_experience.point_pay.PointPay
+import com.nowiwr01p.me.ui.data.pet_project.PetProjectData
 import com.nowiwr01p.me.ui.data.tech_stack.TechStackData
 import com.nowiwr01p.me.ui.data.tech_stack.techProficiences
 import com.nowiwr01p.me.ui.data.workExperienceItems
@@ -87,6 +86,8 @@ private fun Content(
         TechStack()
         Divider()
         WorkExperience()
+        Divider()
+        PetProjectInfo()
         Spacer(modifier = Modifier.height(48.dp))
     }
 }
@@ -293,11 +294,10 @@ private fun WorkItem(workExperience: WorkExperience) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        CompanyNameWithStartEndDates(
+        CompanyPositionEnrollDates(
             companyName = workExperience.companyInfo.name,
             position = workExperience.projectInfo.position,
-            startDate = workExperience.projectInfo.enrolledDates.startDate,
-            endDate = workExperience.projectInfo.enrolledDates.endDate
+            details = workExperience.projectInfo.details
         )
         Text(
             text = workExperience.companyInfo.description,
@@ -335,6 +335,17 @@ private fun WorkItemDivider() = Box(
 }
 
 /**
+ * PET PROJECT
+ */
+@Composable
+private fun PetProjectInfo() {
+    Column {
+        SectionTitle("Pet project")
+        WorkItem(PetProjectData)
+    }
+}
+
+/**
  * SECTION TITLE
  */
 @Composable
@@ -352,11 +363,10 @@ private fun SectionTitle(text: String) = Text(
  * COMPANY NAME AND ENROLLED DATES
  */
 @Composable
-private fun CompanyNameWithStartEndDates(
+private fun CompanyPositionEnrollDates(
     companyName: String,
-    position: String? = null,
-    startDate: String,
-    endDate: String
+    position: String,
+    details: Details
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -377,21 +387,28 @@ private fun CompanyNameWithStartEndDates(
                 modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp)
             )
         }
-        if (position != null) {
-            Text(
-                text = position,
-                color = colorText.copy(alpha = 0.5f),
-                style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Normal),
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
+        Text(
+            text = position,
+            color = colorText.copy(alpha = 0.5f),
+            style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Normal),
+            modifier = Modifier.padding(start = 16.dp)
+        )
         Spacer(
             modifier = Modifier.weight(1f)
         )
         Text(
-            text = "$startDate - $endDate",
-            color = colorText,
-            style = MaterialTheme.typography.h4
+            text = when (details) {
+                is Details.Dates -> "${details.startDate} - ${details.endDate}"
+                is Details.ProjectLink -> "Github"
+            },
+            color = when (details) {
+                is Details.Dates -> colorText
+                is Details.ProjectLink -> colorLink
+            },
+            style = MaterialTheme.typography.h4,
+            modifier = Modifier.clickable(enabled = details is Details.ProjectLink) {
+                // TODO: Add click logic
+            }
         )
     }
 }

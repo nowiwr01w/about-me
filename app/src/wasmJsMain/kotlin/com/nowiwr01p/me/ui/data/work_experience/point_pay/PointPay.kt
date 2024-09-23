@@ -1,9 +1,6 @@
 package com.nowiwr01p.me.ui.data.work_experience.point_pay
 
-import com.nowiwr01p.me.ui.data.CompanyInfo
-import com.nowiwr01p.me.ui.data.Dates
-import com.nowiwr01p.me.ui.data.ProjectInfo
-import com.nowiwr01p.me.ui.data.WorkExperience
+import com.nowiwr01p.me.ui.data.*
 
 data object PointPay : WorkExperience(
     companyInfo = CompanyInfo(
@@ -12,7 +9,7 @@ data object PointPay : WorkExperience(
     ),
     projectInfo = ProjectInfo(
         position = "Senior Android Developer",
-        enrolledDates = Dates(
+        details = Details.Dates(
             startDate = "08.2022",
             endDate = "02.2023"
         ),

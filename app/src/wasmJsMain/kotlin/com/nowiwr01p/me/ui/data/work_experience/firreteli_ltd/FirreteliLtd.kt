@@ -1,7 +1,7 @@
 package com.nowiwr01p.me.ui.data.work_experience.firreteli_ltd
 
 import com.nowiwr01p.me.ui.data.CompanyInfo
-import com.nowiwr01p.me.ui.data.Dates
+import com.nowiwr01p.me.ui.data.Details
 import com.nowiwr01p.me.ui.data.ProjectInfo
 import com.nowiwr01p.me.ui.data.WorkExperience
 
@@ -12,7 +12,7 @@ data object FirreteliLtd : WorkExperience(
     ),
     projectInfo = ProjectInfo(
         position = "Senior Android Developer",
-        enrolledDates = Dates(
+        details = Details.Dates(
             startDate = "03.2023",
             endDate = "10.2023"
         ),

@@ -1,9 +1,6 @@
 package com.nowiwr01p.me.ui.data.work_experience.lifehacker
 
-import com.nowiwr01p.me.ui.data.CompanyInfo
-import com.nowiwr01p.me.ui.data.Dates
-import com.nowiwr01p.me.ui.data.ProjectInfo
-import com.nowiwr01p.me.ui.data.WorkExperience
+import com.nowiwr01p.me.ui.data.*
 
 data object LifeHacker : WorkExperience(
     companyInfo = CompanyInfo(
@@ -12,7 +9,7 @@ data object LifeHacker : WorkExperience(
     ),
     projectInfo = ProjectInfo(
         position = "Middle Android Developer",
-        enrolledDates = Dates(
+        details = Details.Dates(
             startDate = "01.2021",
             endDate = "08.2022"
         ),

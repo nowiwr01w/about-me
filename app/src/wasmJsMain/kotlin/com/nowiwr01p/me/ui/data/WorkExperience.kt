@@ -17,14 +17,19 @@ data class CompanyInfo(
 
 data class ProjectInfo(
     val position: String,
-    val enrolledDates: Dates,
+    val details: Details,
     val tasks: List<String>
 )
 
-data class Dates(
-    val startDate: String,
-    val endDate: String
-)
+sealed interface Details {
+
+    data class ProjectLink(val link: String) : Details
+
+    data class Dates(
+        val startDate: String,
+        val endDate: String
+    ) : Details
+}
 
 internal val workExperienceItems = listOf(
     AgcSoft,

@@ -1,9 +1,6 @@
 package com.nowiwr01p.me.ui.data.work_experience.agc_soft
 
-import com.nowiwr01p.me.ui.data.CompanyInfo
-import com.nowiwr01p.me.ui.data.Dates
-import com.nowiwr01p.me.ui.data.ProjectInfo
-import com.nowiwr01p.me.ui.data.WorkExperience
+import com.nowiwr01p.me.ui.data.*
 
 data object AgcSoft : WorkExperience(
     companyInfo = companyInfo,
@@ -17,7 +14,7 @@ private val companyInfo = CompanyInfo(
 
 private val projectInfo = ProjectInfo(
     position = "Senior Android Developer",
-    enrolledDates = Dates(
+    details = Details.Dates(
         startDate = "11.2023",
         endDate = "Present"
     ),
