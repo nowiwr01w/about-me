@@ -1,28 +1,27 @@
 package com.nowiwr01p.me.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nowiwr01p.me.core_ui.theme.params.colorAccent
-import com.nowiwr01p.me.core_ui.theme.params.colorBackground
-import com.nowiwr01p.me.core_ui.theme.params.colorLink
-import com.nowiwr01p.me.core_ui.theme.params.colorText
+import com.nowiwr01p.me.core_ui.theme.params.*
+import com.nowiwr01p.me.resources.Res
+import com.nowiwr01p.me.resources.avatar
 import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
 import com.nowiwr01p.me.ui.data.Details
@@ -31,6 +30,7 @@ import com.nowiwr01p.me.ui.data.pet_project.PetProjectData
 import com.nowiwr01p.me.ui.data.tech_stack.TechStackData
 import com.nowiwr01p.me.ui.data.tech_stack.techProficiences
 import com.nowiwr01p.me.ui.data.workExperienceItems
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import rememberViewModel
@@ -49,8 +49,8 @@ internal fun HomeMainScreen(
         viewModel.setEvent(Event.Init)
     }
 
-    Box(
-        contentAlignment = Alignment.TopCenter,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(colorBackground)
@@ -60,6 +60,7 @@ internal fun HomeMainScreen(
             state = viewModel.withState(),
             listener = listener
         )
+        ContactsFooter()
     }
 }
 
@@ -92,15 +93,25 @@ private fun Content(
     }
 }
 
+
+@Composable
+private fun Avatar() {
+    Image(
+        painter = painterResource(Res.drawable.avatar),
+        contentDescription = "Avatar",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .padding(top = 32.dp)
+            .size(164.dp)
+            .clip(CircleShape)
+    )
+}
 @Composable
 private fun HeaderWithPhotoAndContacts(
     state: State,
     listener: Listener?
 ) {
-//    Contacts(
-//        state = state,
-//        listener = listener
-//    )
+    Avatar()
     NamePosition()
     LocationTimezone()
 }
@@ -155,10 +166,10 @@ private fun ContactItem(
  @Composable
 private fun NamePosition() {
     Text(
-        text = "Andrey Larionov | Android Developer",
+        text = "Andrey Larionov",
         color = colorAccent,
         style = MaterialTheme.typography.h1,
-        modifier = Modifier.padding(top = 32.dp)
+        modifier = Modifier.padding(top = 16.dp)
     )
 }
 
@@ -342,6 +353,26 @@ private fun PetProjectInfo() {
     Column {
         SectionTitle("Pet project")
         WorkItem(PetProjectData)
+    }
+}
+
+/**
+ * CONTACTS FOOTER
+ */
+@Composable
+private fun ContactsFooter() {
+    val shape = remember { RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp) }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(164.dp)
+            .clip(shape)
+            .background(
+                color = colorBackgroundLight,
+                shape = shape
+            )
+    ) {
+
     }
 }
 
