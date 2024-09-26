@@ -49,6 +49,7 @@ internal fun HomeMainScreen(
         viewModel.setEvent(Event.Init)
     }
 
+    val state = viewModel.withState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -57,10 +58,10 @@ internal fun HomeMainScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Content(
-            state = viewModel.withState(),
+            state = state,
             listener = listener
         )
-        ContactsFooter()
+        ContactsFooter(state, listener)
     }
 }
 
@@ -89,7 +90,7 @@ private fun Content(
         WorkExperience()
         Divider()
         PetProjectInfo()
-        Spacer(modifier = Modifier.height(48.dp))
+        FriendshipTitle()
     }
 }
 
@@ -114,50 +115,6 @@ private fun HeaderWithPhotoAndContacts(
     Avatar()
     NamePosition()
     LocationTimezone()
-}
-
-/**
- * CONTACTS ROW
- */
-@Composable
-private fun Contacts(
-    state: State,
-    listener: Listener?
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(vertical = 16.dp)
-            .fillMaxWidth()
-    ) {
-        state.contacts.forEach { contact ->
-            ContactItem(
-                contact = contact,
-                onContactClick = { listener?.onContactClick(contact) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun ContactItem(
-    contact: ContactData,
-    onContactClick: () -> Unit
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .clickable { onContactClick() }
-    ) {
-        Text(
-            text = stringResource(contact.name).uppercase(),
-            color = colorText,
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 18.dp)
-        )
-    }
 }
 
 /**
@@ -357,12 +314,32 @@ private fun PetProjectInfo() {
 }
 
 /**
+ * LET'S BE FRIENDS TITLE
+ */
+@Composable
+private fun FriendshipTitle() {
+    Text(
+        text = "Let\'s be friends?",
+        color = colorAccent,
+        style = MaterialTheme.typography.h1,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(vertical = 64.dp)
+            .fillMaxWidth()
+    )
+}
+
+/**
  * CONTACTS FOOTER
  */
 @Composable
-private fun ContactsFooter() {
+private fun ContactsFooter(
+    state: State,
+    listener: Listener?
+) {
     val shape = remember { RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp) }
-    Column(
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
             .height(164.dp)
@@ -372,7 +349,51 @@ private fun ContactsFooter() {
                 shape = shape
             )
     ) {
+        Contacts(
+            state = state,
+            listener = listener
+        )
+    }
+}
 
+@Composable
+private fun Contacts(
+    state: State,
+    listener: Listener?
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(vertical = 24.dp)
+            .width(900.dp)
+    ) {
+        state.contacts.forEach { contact ->
+            ContactItem(
+                contact = contact,
+                onContactClick = { listener?.onContactClick(contact) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ContactItem(
+    contact: ContactData,
+    onContactClick: () -> Unit
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onContactClick() }
+    ) {
+        Text(
+            text = stringResource(contact.name).uppercase(),
+            color = colorText,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+        )
     }
 }
 
