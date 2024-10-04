@@ -1,7 +1,10 @@
 package com.nowiwr01p.me.ui.data.calendar
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,18 +16,28 @@ import androidx.compose.ui.unit.dp
 import com.nowiwr01p.me.core_ui.theme.params.colorText
 import kotlinx.datetime.LocalDate
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
-internal fun Calendar() {
-    FlowRow(
-        maxItemsInEachRow = 7,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(vertical = 48.dp)
-    ) {
-        getDatesForCurrentAndNextMonth().take(5).forEach { month -> // TODO: Make ViewPager, getting rid of .take(5)
-            month.forEach { date ->
-                CalendarIem(date)
+internal fun Calendar(
+    calendar: List<List<LocalDate?>> = getDatesForCurrentAndNextMonth()
+) {
+    val pagerState = rememberPagerState { calendar.size / 5 }
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier
+            .padding(vertical = 48.dp)
+            .fillMaxWidth()
+    ) { page ->
+        FlowRow(
+            maxItemsInEachRow = 7,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
+        ) {
+            calendar.subList(page * 5, (page + 1) * 5).forEach { month ->
+                month.forEach { date ->
+                    CalendarIem(date)
+                }
             }
         }
     }
