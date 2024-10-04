@@ -26,6 +26,7 @@ import com.nowiwr01p.me.shared.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
 import com.nowiwr01p.me.ui.data.Details
 import com.nowiwr01p.me.ui.data.WorkExperience
+import com.nowiwr01p.me.ui.data.calendar.Calendar
 import com.nowiwr01p.me.ui.data.pet_project.PetProjectData
 import com.nowiwr01p.me.ui.data.tech_stack.TechStackData
 import com.nowiwr01p.me.ui.data.tech_stack.techProficiences
@@ -90,7 +91,10 @@ private fun Content(
         WorkExperience()
         Divider()
         PetProjectInfo()
+        Divider()
         FriendshipTitle()
+        FriendshipDescription()
+        Calendar()
     }
 }
 
@@ -314,7 +318,7 @@ private fun PetProjectInfo() {
 }
 
 /**
- * LET'S BE FRIENDS TITLE
+ * LET'S BE FRIENDS TITLE AND DESCRIPTION
  */
 @Composable
 private fun FriendshipTitle() {
@@ -324,7 +328,21 @@ private fun FriendshipTitle() {
         style = MaterialTheme.typography.h1,
         textAlign = TextAlign.Center,
         modifier = Modifier
-            .padding(vertical = 64.dp)
+            .padding(top = 32.dp)
+            .fillMaxWidth()
+    )
+}
+
+@Composable
+private fun FriendshipDescription() {
+    Text(
+        text = "Here you can schedule a call with me\n Just select a date and relax, I will be notified instantly",
+        color = colorText,
+        style = MaterialTheme.typography.body1.copy(lineHeight = 28.sp),
+        maxLines = 2,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(top = 16.dp)
             .fillMaxWidth()
     )
 }

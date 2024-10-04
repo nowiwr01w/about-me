@@ -25,7 +25,7 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     sourceSets {
         val wasmJsMain by getting {
             dependencies {
@@ -49,6 +49,7 @@ kotlin {
                 /**
                  * DEPENDENCIES
                  */
+                implementation(libs.kotlin.date.time)
                 implementation(libs.koin)
                 implementation(libs.koin.compose)
                 implementation(libs.coroutines)
