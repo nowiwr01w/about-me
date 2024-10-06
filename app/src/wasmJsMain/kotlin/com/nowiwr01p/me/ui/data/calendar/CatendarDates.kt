@@ -2,7 +2,7 @@ package com.nowiwr01p.me.ui.data.calendar
 
 import kotlinx.datetime.*
 
-fun getDatesForCurrentAndNextMonth(): List<List<LocalDate?>> {
+fun getDatesForCurrentAndNextMonth(): List<CalendarMonth> {
     val today = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
@@ -14,10 +14,13 @@ fun getDatesForCurrentAndNextMonth(): List<List<LocalDate?>> {
     )
     val nextMonth = currentMonth.plus(DatePeriod(months = 1))
 
-    return getCalendarGridForMonth(currentMonth) + getCalendarGridForMonth(nextMonth)
+    return listOf(
+        getCalendarGridForMonth(currentMonth),
+        getCalendarGridForMonth(nextMonth)
+    )
 }
 
-private fun getCalendarGridForMonth(month: LocalDate): List<List<LocalDate?>> {
+private fun getCalendarGridForMonth(month: LocalDate): CalendarMonth {
     val firstDayOfMonth = LocalDate(
         year = month.year,
         monthNumber = month.monthNumber,
@@ -31,7 +34,10 @@ private fun getCalendarGridForMonth(month: LocalDate): List<List<LocalDate?>> {
     val daysInMonth = (1..lastDayOfMonth.dayOfMonth).map { day ->
         firstDayOfMonth.plus(DatePeriod(days = day - 1))
     }
-    return (daysBeforeMonthStart + daysInMonth + daysAfterMonthEnd).chunked(7)
+    return CalendarMonth(
+        name = month.month.name,
+        days = daysBeforeMonthStart + daysInMonth + daysAfterMonthEnd
+    )
 }
 
 data class MeetingTiming(
@@ -44,4 +50,9 @@ private fun getAvailableMeetingsTimings() = listOf(
     MeetingTiming(id = 2, time = 1),
     MeetingTiming(id = 3, time = 1),
     MeetingTiming(id = 4, time = 1)
+)
+
+data class CalendarMonth(
+    val name: String,
+    val days: List<LocalDate?>
 )
