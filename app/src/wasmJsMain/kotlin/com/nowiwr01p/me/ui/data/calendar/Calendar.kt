@@ -1,11 +1,27 @@
 package com.nowiwr01p.me.ui.data.calendar
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -34,6 +50,10 @@ import androidx.compose.ui.unit.dp
 import com.nowiwr01p.me.core_ui.theme.params.colorBackgroundLight
 import com.nowiwr01p.me.core_ui.theme.params.colorText
 import com.nowiwr01p.me.ui.Divider
+import com.nowiwr01p.me.ui.data.calendar.CalendarDay.Available
+import com.nowiwr01p.me.ui.data.calendar.CalendarDay.Hidden
+import com.nowiwr01p.me.ui.data.calendar.CalendarDay.ShortDayName
+import com.nowiwr01p.me.ui.data.calendar.CalendarDay.Unavailable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -41,12 +61,17 @@ internal fun Calendar(
     calendar: List<CalendarMonth> = getDatesForCurrentAndNextMonth()
 ) {
     val density = LocalDensity.current
+    var page by remember { mutableStateOf(0) }
     val pagerState = rememberPagerState { calendar.size }
     var displayedMonth by remember { mutableStateOf(calendar.first()) }
     val calendarGridWidth = remember { mutableStateOf(0.dp) }
 
-    LaunchedEffect(pagerState.currentPage) {
-        displayedMonth = calendar[pagerState.currentPage]
+    LaunchedEffect(page) {
+        displayedMonth = calendar[page]
+        pagerState.animateScrollToPage(
+            page = page,
+            animationSpec = tween(500)
+        )
     }
 
     Column(
@@ -55,13 +80,19 @@ internal fun Calendar(
     ) {
         CalendarHeader(
             month = displayedMonth,
+            onPreviousArrowClick = { page -= 1 },
+            onNextArrowClick = { page += 1 },
+            isFirstMonth = page == 0,
+            isLastMonth = page == calendar.lastIndex,
             maxWidth = calendarGridWidth
         )
-        HorizontalPager(
+        VerticalPager(
             state = pagerState,
+            beyondBoundsPageCount = 1,
+            userScrollEnabled = false,
             modifier = Modifier
                 .padding(top = 16.dp, bottom = 64.dp)
-                .fillMaxWidth()
+                .heightIn(max = 290.dp)
         ) {
             CalendarDates(
                 month = displayedMonth,
@@ -79,6 +110,10 @@ internal fun Calendar(
 @Composable
 private fun CalendarHeader(
     month: CalendarMonth,
+    onPreviousArrowClick: () -> Unit,
+    onNextArrowClick: () -> Unit,
+    isFirstMonth: Boolean,
+    isLastMonth: Boolean,
     maxWidth: MutableState<Dp>
 ) {
     Column(
@@ -87,14 +122,32 @@ private fun CalendarHeader(
             .padding(top = 64.dp)
             .width(maxWidth.value)
     ) {
-        MonthNameWithArrows(month)
+        MonthNameWithArrows(
+            month = month,
+            onPreviousArrowClick = onPreviousArrowClick,
+            onNextArrowClick = onNextArrowClick,
+            isFirstMonth = isFirstMonth,
+            isLastMonth = isLastMonth,
+        )
         Divider(topPadding = 16.dp)
         DaysNameRow()
     }
 }
 
 @Composable
-private fun MonthNameWithArrows(month: CalendarMonth) {
+private fun MonthNameWithArrows(
+    month: CalendarMonth,
+    onPreviousArrowClick: () -> Unit,
+    onNextArrowClick: () -> Unit,
+    isFirstMonth: Boolean,
+    isLastMonth: Boolean
+) {
+    val previousMonthArrowColor by animateColorAsState(
+        targetValue = if (isFirstMonth) colorBackgroundLight else colorText
+    )
+    val nextMonthArrowColor by animateColorAsState(
+        targetValue = if (isLastMonth) colorBackgroundLight else colorText
+    )
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -103,8 +156,11 @@ private fun MonthNameWithArrows(month: CalendarMonth) {
         Image(
             painter = rememberVectorPainter(Icons.AutoMirrored.Default.ArrowBack),
             contentDescription = "Previous month arrow",
-            colorFilter = ColorFilter.tint(colorBackgroundLight),
-            modifier = Modifier.size(24.dp)
+            colorFilter = ColorFilter.tint(previousMonthArrowColor),
+            modifier = Modifier
+                .size(24.dp)
+                .clip(CircleShape)
+                .clickable(enabled = !isFirstMonth) { onPreviousArrowClick() }
         )
         Spacer(
             modifier = Modifier.weight(0.5f)
@@ -124,8 +180,11 @@ private fun MonthNameWithArrows(month: CalendarMonth) {
         Image(
             painter = rememberVectorPainter(Icons.AutoMirrored.Default.ArrowForward),
             contentDescription = "Next month arrow",
-            colorFilter = ColorFilter.tint(colorBackgroundLight),
-            modifier = Modifier.size(24.dp)
+            colorFilter = ColorFilter.tint(nextMonthArrowColor),
+            modifier = Modifier
+                .size(24.dp)
+                .clip(CircleShape)
+                .clickable(enabled = !isLastMonth) { onNextArrowClick() }
         )
     }
 }
@@ -134,8 +193,8 @@ private fun MonthNameWithArrows(month: CalendarMonth) {
 private fun DaysNameRow() = Row(
     modifier = Modifier.padding(top = 16.dp)
 ) {
-    listOf("M", "T", "W", "T", "F", "S", "S").forEach { // TODO: Use resources
-        CalendarIem(it)
+    listOf("M", "T", "W", "T", "F", "S", "S").map { ShortDayName(it) }.forEach { // TODO: Use resources
+        CalendarDay(it)
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
@@ -149,27 +208,30 @@ private fun CalendarDates(
     month: CalendarMonth,
     gridWidthModifier: Modifier
 ) {
-    FlowRow(
-        maxItemsInEachRow = 7,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .then(gridWidthModifier)
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
     ) {
-        month.days.forEach { date ->
-            CalendarIem(
-                text = date?.dayOfMonth?.toString()?.padStart(2, '0') ?: "  ",
-                onDateClick = {  }
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(7),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .widthIn(max = 390.dp)
+                .then(gridWidthModifier)
+        ) {
+            items(month.days) { date ->
+                CalendarDay(calendarDay = date) {
+                    // TODO: Handle onClick
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun CalendarIem(
-    text: String,
+private fun CalendarDay(
+    calendarDay: CalendarDay,
     onDateClick: (() -> Unit)? = null
 ) {
     Box(
@@ -177,13 +239,23 @@ private fun CalendarIem(
         modifier = Modifier
             .size(42.dp)
             .clip(CircleShape)
-            .clickable(enabled = text.trim().isNotEmpty() && onDateClick != null) {
+            .clickable(enabled = calendarDay is Available) {
                 onDateClick?.invoke()
             }
     ) {
+        val text = when (calendarDay) {
+            is Hidden -> "  "
+            is Available -> calendarDay.day
+            is Unavailable -> calendarDay.day
+            is ShortDayName -> calendarDay.name
+        }
+        val textColor = when (calendarDay) {
+            is Hidden, is Unavailable -> colorBackgroundLight
+            is ShortDayName, is Available -> colorText
+        }
         Text(
             text = text,
-            color = colorText,
+            color = textColor,
             style = MaterialTheme.typography.subtitle1,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
