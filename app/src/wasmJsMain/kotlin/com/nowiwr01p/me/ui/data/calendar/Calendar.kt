@@ -5,11 +5,11 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.onSizeChanged
@@ -47,27 +48,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.nowiwr01p.me.core_ui.theme.params.colorAccent
 import com.nowiwr01p.me.core_ui.theme.params.colorBackgroundLight
 import com.nowiwr01p.me.core_ui.theme.params.colorText
+import com.nowiwr01p.me.shared.calendar.CalendarDay
+import com.nowiwr01p.me.shared.calendar.CalendarDay.Available
+import com.nowiwr01p.me.shared.calendar.CalendarDay.Hidden
+import com.nowiwr01p.me.shared.calendar.CalendarDay.ShortDayName
+import com.nowiwr01p.me.shared.calendar.CalendarDay.Unavailable
+import com.nowiwr01p.me.shared.calendar.CalendarMonth
 import com.nowiwr01p.me.ui.Divider
-import com.nowiwr01p.me.ui.data.calendar.CalendarDay.Available
-import com.nowiwr01p.me.ui.data.calendar.CalendarDay.Hidden
-import com.nowiwr01p.me.ui.data.calendar.CalendarDay.ShortDayName
-import com.nowiwr01p.me.ui.data.calendar.CalendarDay.Unavailable
+import com.nowiwr01p.me.ui.HomeContract.Listener
+import com.nowiwr01p.me.ui.HomeContract.State
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun Calendar(
-    calendar: List<CalendarMonth> = getDatesForCurrentAndNextMonth()
+    state: State,
+    listener: Listener?
 ) {
+    if (state.calendarState.calendar.isEmpty()) {
+        return
+    }
     val density = LocalDensity.current
     var page by remember { mutableStateOf(0) }
-    val pagerState = rememberPagerState { calendar.size }
-    var displayedMonth by remember { mutableStateOf(calendar.first()) }
+    val pagerState = rememberPagerState { state.calendarState.calendar.size }
+    var displayedMonth by remember { mutableStateOf(state.calendarState.calendar.first()) }
     val calendarGridWidth = remember { mutableStateOf(0.dp) }
 
     LaunchedEffect(page) {
-        displayedMonth = calendar[page]
+        displayedMonth = state.calendarState.calendar[page]
         pagerState.animateScrollToPage(
             page = page,
             animationSpec = tween(500)
@@ -83,7 +93,7 @@ internal fun Calendar(
             onPreviousArrowClick = { page -= 1 },
             onNextArrowClick = { page += 1 },
             isFirstMonth = page == 0,
-            isLastMonth = page == calendar.lastIndex,
+            isLastMonth = page == state.calendarState.calendar.lastIndex,
             maxWidth = calendarGridWidth
         )
         VerticalPager(
@@ -96,6 +106,8 @@ internal fun Calendar(
         ) {
             CalendarDates(
                 month = displayedMonth,
+                selectedDay = state.calendarState.selectedDate,
+                onDateClick = { listener?.onDateClick(it) },
                 gridWidthModifier = Modifier.onSizeChanged { size ->
                     calendarGridWidth.value = size.width.dp / density.density
                 }
@@ -194,7 +206,7 @@ private fun DaysNameRow() = Row(
     modifier = Modifier.padding(top = 16.dp)
 ) {
     listOf("M", "T", "W", "T", "F", "S", "S").map { ShortDayName(it) }.forEach { // TODO: Use resources
-        CalendarDay(it)
+        CalendarDay(it, selectedDay = null)
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
@@ -202,10 +214,11 @@ private fun DaysNameRow() = Row(
 /**
  * GRID CALENDAR DATES
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CalendarDates(
     month: CalendarMonth,
+    selectedDay: CalendarDay?,
+    onDateClick: (date: Available) -> Unit,
     gridWidthModifier: Modifier
 ) {
     Box(
@@ -221,9 +234,13 @@ private fun CalendarDates(
                 .then(gridWidthModifier)
         ) {
             items(month.days) { date ->
-                CalendarDay(calendarDay = date) {
-                    // TODO: Handle onClick
-                }
+                CalendarDay(
+                    calendarDay = date,
+                    selectedDay = selectedDay,
+                    onDateClick = if (date !is Available) null else {{
+                        onDateClick(date)
+                    }}
+                )
             }
         }
     }
@@ -232,13 +249,19 @@ private fun CalendarDates(
 @Composable
 private fun CalendarDay(
     calendarDay: CalendarDay,
+    selectedDay: CalendarDay?,
     onDateClick: (() -> Unit)? = null
 ) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (calendarDay == selectedDay) colorAccent else Color.Transparent,
+        animationSpec = tween(durationMillis = 500)
+    )
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(42.dp)
             .clip(CircleShape)
+            .background(backgroundColor)
             .clickable(enabled = calendarDay is Available) {
                 onDateClick?.invoke()
             }

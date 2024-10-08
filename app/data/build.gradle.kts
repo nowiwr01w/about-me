@@ -30,6 +30,10 @@ kotlin {
                  * COMPOSE
                  */
                 implementation(compose.runtime)
+                /**
+                 * DEPENDENCIES
+                 */
+                implementation(libs.kotlin.date.time)
             }
         }
     }

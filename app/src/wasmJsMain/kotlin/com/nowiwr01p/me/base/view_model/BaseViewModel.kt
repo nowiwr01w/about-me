@@ -27,7 +27,7 @@ abstract class BaseViewModel<Event: BaseEvent, State: BaseState, Effect: BaseEff
     @Composable
     fun withState() = viewState.collectAsState().value
 
-    suspend fun getState() = mutex.withLock { viewState }
+    fun getState() = viewState.value
 
     protected suspend fun setState(reducer: State.() -> State) = mutex.withLock {
         val newState = viewState.value.reducer()

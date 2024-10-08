@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.nowiwr01p.me.core_ui.theme.params.*
 import com.nowiwr01p.me.resources.Res
 import com.nowiwr01p.me.resources.avatar
-import com.nowiwr01p.me.shared.ContactData
+import com.nowiwr01p.me.shared.contact.ContactData
 import com.nowiwr01p.me.ui.HomeContract.*
 import com.nowiwr01p.me.ui.data.Details
 import com.nowiwr01p.me.ui.data.WorkExperience
@@ -34,7 +34,8 @@ import com.nowiwr01p.me.ui.data.workExperienceItems
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import rememberViewModel
+import com.nowiwr01p.me.base.view_model.rememberViewModel
+import com.nowiwr01p.me.shared.calendar.CalendarDay
 
 @Composable
 internal fun HomeMainScreen(
@@ -43,6 +44,9 @@ internal fun HomeMainScreen(
     val listener = object : Listener {
         override fun onContactClick(contact: ContactData) {
 
+        }
+        override fun onDateClick(date: CalendarDay.Available) {
+            viewModel.setEvent(Event.OnCalendarDateClicked(date))
         }
     }
 
@@ -62,7 +66,10 @@ internal fun HomeMainScreen(
             state = state,
             listener = listener
         )
-        ContactsFooter(state, listener)
+        ContactsFooter(
+            state = state,
+            listener = listener
+        )
     }
 }
 
@@ -94,7 +101,10 @@ private fun Content(
         Divider()
         FriendshipTitle()
         FriendshipDescription()
-        Calendar()
+        Calendar(
+            state = state,
+            listener = listener
+        )
     }
 }
 

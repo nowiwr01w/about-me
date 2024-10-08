@@ -1,4 +1,4 @@
-package com.nowiwr01p.me.shared
+package com.nowiwr01p.me.shared.contact
 
 import com.nowiwr01p.me.resources.*
 import org.jetbrains.compose.resources.StringResource

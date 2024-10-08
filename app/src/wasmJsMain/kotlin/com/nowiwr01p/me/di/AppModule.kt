@@ -1,5 +1,7 @@
 package com.nowiwr01p.me.di
 
+import com.nowiwr01p.me.domain.calendar.GetCalendarUseCase
+import com.nowiwr01p.me.domain.contacts.GetContactsUseCase
 import com.nowiwr01p.me.ui.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.qualifier.named
@@ -12,7 +14,8 @@ internal val moduleApp = module {
     single { (scope: CoroutineScope) ->
         HomeViewModel(
             scope = scope,
-            getContactsUseCase = get(named("Local"))
+            getContactsUseCase = get<GetContactsUseCase>(named("Local")),
+            getCalendarUseCase = get<GetCalendarUseCase>()
         )
     }
 }

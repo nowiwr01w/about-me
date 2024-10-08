@@ -20,9 +20,19 @@ kotlin {
     sourceSets {
         val wasmJsMain by getting {
             dependencies {
+                /**
+                 * PROJECT MODULES
+                 */
                 implementation(projects.resources)
+                /**
+                 * COMPOSE
+                 */
                 implementation(compose.runtime)
                 implementation(compose.components.resources)
+                /**
+                 * DEPENDENCIES
+                 */
+                implementation(libs.kotlin.date.time)
             }
         }
     }
