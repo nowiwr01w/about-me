@@ -50,7 +50,7 @@ class HomeViewModel(
         runCatching {
             getCalendarUseCase.execute()
         }.onSuccess { calendar ->
-            val initialSelectedDate = calendar.flatMap { it.days }
+            val initialSelectedDate = calendar.flatMap { it.days } // TODO: Check the first date contains MeetingTiming
                 .filterIsInstance<Available>()
                 .find { it.isCurrentDay }
             val updatedCalendarState = getState().calendarState.copy(

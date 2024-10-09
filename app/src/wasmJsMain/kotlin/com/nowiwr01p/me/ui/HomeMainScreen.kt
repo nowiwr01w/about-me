@@ -14,8 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -149,8 +152,17 @@ private fun NamePosition() {
  */
  @Composable
 private fun LocationTimezone() {
+    val text = buildAnnotatedString {
+        append("UTC+4")
+        append(" | ")
+        append("Georgia, Tbilisi")
+        append(" | ")
+        withStyle(style = SpanStyle(color = colorLink)) {
+            append("Contact me")
+        }
+    }
     Text(
-        text = "UTC+4 | Georgia, Tbilisi | GMT+4",
+        text = text,
         color = colorText,
         style = MaterialTheme.typography.h5,
         modifier = Modifier.padding(top = 16.dp)
