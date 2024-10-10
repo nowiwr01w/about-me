@@ -1,32 +1,60 @@
 package com.nowiwr01p.me.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nowiwr01p.me.core_ui.theme.params.*
+import com.nowiwr01p.me.base.view_model.rememberViewModel
+import com.nowiwr01p.me.core_ui.extensions.appendLink
+import com.nowiwr01p.me.core_ui.extensions.onTextClick
+import com.nowiwr01p.me.core_ui.theme.params.colorAccent
+import com.nowiwr01p.me.core_ui.theme.params.colorBackground
+import com.nowiwr01p.me.core_ui.theme.params.colorBackgroundLight
+import com.nowiwr01p.me.core_ui.theme.params.colorLink
+import com.nowiwr01p.me.core_ui.theme.params.colorText
 import com.nowiwr01p.me.resources.Res
 import com.nowiwr01p.me.resources.avatar
+import com.nowiwr01p.me.shared.calendar.CalendarDay
 import com.nowiwr01p.me.shared.contact.ContactData
-import com.nowiwr01p.me.ui.HomeContract.*
+import com.nowiwr01p.me.ui.HomeContract.Event
+import com.nowiwr01p.me.ui.HomeContract.Listener
+import com.nowiwr01p.me.ui.HomeContract.State
 import com.nowiwr01p.me.ui.data.Details
 import com.nowiwr01p.me.ui.data.WorkExperience
 import com.nowiwr01p.me.ui.data.calendar.Calendar
@@ -34,11 +62,10 @@ import com.nowiwr01p.me.ui.data.pet_project.PetProjectData
 import com.nowiwr01p.me.ui.data.tech_stack.TechStackData
 import com.nowiwr01p.me.ui.data.tech_stack.techProficiences
 import com.nowiwr01p.me.ui.data.workExperienceItems
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import com.nowiwr01p.me.base.view_model.rememberViewModel
-import com.nowiwr01p.me.shared.calendar.CalendarDay
 
 @Composable
 internal fun HomeMainScreen(
@@ -58,16 +85,18 @@ internal fun HomeMainScreen(
     }
 
     val state = viewModel.withState()
+    val scrollState = rememberScrollState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(colorBackground)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
         Content(
             state = state,
-            listener = listener
+            listener = listener,
+            scrollState = scrollState
         )
         ContactsFooter(
             state = state,
@@ -79,7 +108,8 @@ internal fun HomeMainScreen(
 @Composable
 private fun Content(
     state: State,
-    listener: Listener?
+    listener: Listener?,
+    scrollState: ScrollState
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,7 +119,8 @@ private fun Content(
     ) {
         HeaderWithPhotoAndContacts(
             state = state,
-            listener = listener
+            listener = listener,
+            scrollState = scrollState
         )
         Divider(topPadding = 16.dp)
         Description()
@@ -127,11 +158,12 @@ private fun Avatar() {
 @Composable
 private fun HeaderWithPhotoAndContacts(
     state: State,
-    listener: Listener?
+    listener: Listener?,
+    scrollState: ScrollState
 ) {
     Avatar()
     NamePosition()
-    LocationTimezone()
+    LocationTimezone(scrollState)
 }
 
 /**
@@ -151,21 +183,33 @@ private fun NamePosition() {
  * LOCATION AND TIMEZONE INFO
  */
  @Composable
-private fun LocationTimezone() {
-    val text = buildAnnotatedString {
-        append("UTC+4")
+private fun LocationTimezone(scrollState: ScrollState) {
+    val scope = rememberCoroutineScope()
+    val contactMeClickableText = "Contact me"
+    val annotatedText = buildAnnotatedString {
+        append("UTC+4 | ")
+        append("Georgia, Tbilisi") // TODO: Translate with resources
         append(" | ")
-        append("Georgia, Tbilisi")
-        append(" | ")
-        withStyle(style = SpanStyle(color = colorLink)) {
-            append("Contact me")
-        }
+        appendLink(contactMeClickableText)
     }
-    Text(
-        text = text,
-        color = colorText,
-        style = MaterialTheme.typography.h5,
-        modifier = Modifier.padding(top = 16.dp)
+    ClickableText(
+        text = annotatedText,
+        style = MaterialTheme.typography.h5.copy(color = colorText),
+        modifier = Modifier.padding(top = 16.dp),
+        onClick = { offset ->
+            annotatedText.onTextClick(
+                text = contactMeClickableText,
+                offset = offset,
+                onClick = {
+                    scope.launch {
+                        scrollState.animateScrollTo(
+                            value = scrollState.maxValue,
+                            animationSpec = tween(durationMillis = 750)
+                        )
+                    }
+                }
+            )
+        }
     )
 }
 
@@ -525,5 +569,6 @@ internal fun Divider(topPadding: Dp = 32.dp) = Box(
 @Composable
 private fun Preview() = Content(
     state = State(),
-    listener = null
+    listener = null,
+    scrollState = rememberScrollState()
 )
