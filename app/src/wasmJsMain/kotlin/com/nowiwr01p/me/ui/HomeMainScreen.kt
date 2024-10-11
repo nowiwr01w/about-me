@@ -25,6 +25,8 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,6 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +54,7 @@ import com.nowiwr01p.me.core_ui.theme.params.colorLink
 import com.nowiwr01p.me.core_ui.theme.params.colorText
 import com.nowiwr01p.me.resources.Res
 import com.nowiwr01p.me.resources.avatar
+import com.nowiwr01p.me.resources.ic_drop_down_arrow
 import com.nowiwr01p.me.shared.calendar.CalendarDay
 import com.nowiwr01p.me.shared.contact.ContactData
 import com.nowiwr01p.me.ui.HomeContract.Event
@@ -509,7 +514,22 @@ private fun CompanyPositionEnrollDates(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .clickable {  }
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_drop_down_arrow),
+                contentDescription = "Show or hide work experience details",
+                colorFilter = ColorFilter.tint(colorBackgroundLight),
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        Box(
+            modifier = Modifier
+                .padding(start = 16.dp)
                 .clip(MaterialTheme.shapes.medium)
                 .background(
                     color = Color(0xFF5E2B9D),
