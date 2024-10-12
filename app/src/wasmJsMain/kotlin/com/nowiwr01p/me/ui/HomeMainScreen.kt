@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import com.nowiwr01p.me.base.view_model.rememberViewModel
 import com.nowiwr01p.me.core_ui.extensions.appendLink
 import com.nowiwr01p.me.core_ui.extensions.onTextClick
@@ -71,6 +72,8 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+private val MAX_CONTENT_WIDTH = 900.dp
 
 @Composable
 internal fun HomeMainScreen(
@@ -118,36 +121,51 @@ private fun Content(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .widthIn(max = 900.dp)
-            .fillMaxHeight()
+        modifier = Modifier.fillMaxHeight()
     ) {
         HeaderWithPhotoAndContacts(
             state = state,
             listener = listener,
             scrollState = scrollState
         )
-        Divider(topPadding = 16.dp)
-        Description()
-        Divider()
-        Education()
-        Divider()
-        TechStack()
-        Divider()
+        homeItem {
+            Divider(topPadding = 16.dp)
+            Description()
+            Divider()
+            Education()
+            Divider()
+            TechStack()
+            Divider()
+        }
         WorkExperience()
-        Divider()
-        PetProjectInfo()
-        Divider()
-        FriendshipTitle()
-        FriendshipDescription()
-        Calendar(
-            state = state,
-            listener = listener
-        )
+        homeItem {
+            Divider()
+            PetProjectInfo()
+            Divider()
+            FriendshipTitle()
+            FriendshipDescription()
+            Calendar(
+                state = state,
+                listener = listener
+            )
+        }
     }
 }
 
+@Composable
+private fun HeaderWithPhotoAndContacts(
+    state: State,
+    listener: Listener?,
+    scrollState: ScrollState
+) {
+    Avatar()
+    NamePosition()
+    LocationTimezone(scrollState)
+}
 
+/**
+ * AVATAR
+ */
 @Composable
 private fun Avatar() {
     Image(
@@ -159,16 +177,6 @@ private fun Avatar() {
             .size(164.dp)
             .clip(CircleShape)
     )
-}
-@Composable
-private fun HeaderWithPhotoAndContacts(
-    state: State,
-    listener: Listener?,
-    scrollState: ScrollState
-) {
-    Avatar()
-    NamePosition()
-    LocationTimezone(scrollState)
 }
 
 /**
@@ -320,42 +328,54 @@ private fun TechStackItem(data: TechStackData) {
 @Composable
 private fun WorkExperience() {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SectionTitle("Work experience")
+        homeItem(isContentCentered = false) {
+            SectionTitle("Work experience")
+        }
         workExperienceItems.forEachIndexed { index, data ->
             WorkItem(data)
             if (index != workExperienceItems.lastIndex) {
-                WorkItemDivider()
+                homeItem {
+                    WorkItemDivider()
+                }
             }
         }
     }
 }
 
 @Composable
-private fun WorkItem(workExperience: WorkExperience) {
+private fun WorkItem(
+    workExperience: WorkExperience,
+    showDropDownArrow: Boolean = true
+) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CompanyPositionEnrollDates(
+            showDropDownArrow = showDropDownArrow,
             companyName = workExperience.companyInfo.name,
             position = workExperience.projectInfo.position,
             details = workExperience.projectInfo.details
         )
-        Text(
-            text = workExperience.companyInfo.description,
-            color = colorText,
-            style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
-        workExperience.projectInfo.tasks.forEachIndexed { index, task ->
+        homeItem(isContentCentered = false) {
             Text(
-                text = "- $task",
+                text = workExperience.companyInfo.description,
                 color = colorText,
-                style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp)
+                style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
+                modifier = Modifier.padding(vertical = 16.dp)
             )
-            if (index != workExperience.projectInfo.tasks.lastIndex) {
-                Spacer(modifier = Modifier.height(10.dp))
+            workExperience.projectInfo.tasks.forEachIndexed { index, task ->
+                Text(
+                    text = "- $task",
+                    color = colorText,
+                    style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp)
+                )
+                if (index != workExperience.projectInfo.tasks.lastIndex) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
             }
         }
     }
@@ -384,7 +404,10 @@ private fun WorkItemDivider() = Box(
 private fun PetProjectInfo() {
     Column {
         SectionTitle("Pet project")
-        WorkItem(PetProjectData)
+        WorkItem(
+            showDropDownArrow = false,
+            workExperience = PetProjectData
+        )
     }
 }
 
@@ -505,31 +528,38 @@ private fun SectionTitle(text: String) = Text(
  */
 @Composable
 private fun CompanyPositionEnrollDates(
+    showDropDownArrow: Boolean = true,
     companyName: String,
     position: String,
     details: Details
 ) {
+    val startPaddingFromArrow = if (showDropDownArrow) 16.dp else 0.dp
+    val dropDownArrowContainerWidth = if (showDropDownArrow) 40.dp else 0.dp
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(end = dropDownArrowContainerWidth + startPaddingFromArrow)
+            .width(MAX_CONTENT_WIDTH + dropDownArrowContainerWidth + startPaddingFromArrow),
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .clickable {  }
-        ) {
-            Image(
-                painter = painterResource(Res.drawable.ic_drop_down_arrow),
-                contentDescription = "Show or hide work experience details",
-                colorFilter = ColorFilter.tint(colorBackgroundLight),
-                modifier = Modifier.size(20.dp)
-            )
+        if (showDropDownArrow) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(dropDownArrowContainerWidth)
+                    .clip(CircleShape)
+                    .clickable {  }
+            ) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_drop_down_arrow),
+                    contentDescription = "Show or hide work experience details",
+                    colorFilter = ColorFilter.tint(colorBackgroundLight),
+                    modifier = Modifier.size(dropDownArrowContainerWidth / 2)
+                )
+            }
         }
         Box(
             modifier = Modifier
-                .padding(start = 16.dp)
+                .padding(start = startPaddingFromArrow)
                 .clip(MaterialTheme.shapes.medium)
                 .background(
                     color = Color(0xFF5E2B9D),
@@ -581,6 +611,25 @@ internal fun Divider(topPadding: Dp = 32.dp) = Box(
         .height(1.dp)
         .background(colorText.copy(alpha = 0.2f))
 )
+
+/**
+ * COLUMN WRAP TO MANAGE MAX ITEM WIDTH (except WorkExperience)
+ */
+@Composable
+private fun homeItem(
+    isContentCentered: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    Column(
+        modifier = Modifier.width(MAX_CONTENT_WIDTH),
+        horizontalAlignment = when {
+            isContentCentered -> Alignment.CenterHorizontally
+            else -> Alignment.Start
+        }
+    ) {
+        content()
+    }
+}
 
 /**
  * PREVIEW
