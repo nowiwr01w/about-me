@@ -1,6 +1,11 @@
 package com.nowiwr01p.me.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -17,7 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,18 +29,19 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -44,7 +49,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.times
 import com.nowiwr01p.me.base.view_model.rememberViewModel
 import com.nowiwr01p.me.core_ui.extensions.appendLink
 import com.nowiwr01p.me.core_ui.extensions.onTextClick
@@ -121,7 +125,9 @@ private fun Content(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier
+            .fillMaxHeight()
+            .animateContentSize(animationSpec = tween(durationMillis = 500))
     ) {
         HeaderWithPhotoAndContacts(
             state = state,
@@ -346,35 +352,47 @@ private fun WorkExperience() {
 }
 
 @Composable
-private fun WorkItem(
-    workExperience: WorkExperience,
-    showDropDownArrow: Boolean = true
-) {
+private fun WorkItem(workExperience: WorkExperience) {
+    val showWorkExperienceDetails = remember {
+        val isPetProject = workExperience is PetProjectData
+        val stillWorkingThere = with(workExperience.projectInfo) {
+            details is Details.Dates && details.endDate == "Present" // TODO: Replace with resource®
+        }
+        mutableStateOf(stillWorkingThere || isPetProject)
+    }
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(animationSpec = tween(durationMillis = 500))
     ) {
         CompanyPositionEnrollDates(
-            showDropDownArrow = showDropDownArrow,
+            showWorkExperienceDetails = showWorkExperienceDetails,
             companyName = workExperience.companyInfo.name,
             position = workExperience.projectInfo.position,
             details = workExperience.projectInfo.details
         )
-        homeItem(isContentCentered = false) {
-            Text(
-                text = workExperience.companyInfo.description,
-                color = colorText,
-                style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-            workExperience.projectInfo.tasks.forEachIndexed { index, task ->
+        AnimatedVisibility(
+            visible = showWorkExperienceDetails.value,
+            enter = fadeIn(animationSpec = tween()),
+            exit = fadeOut(animationSpec = tween())
+        ) {
+            homeItem(isContentCentered = false) {
                 Text(
-                    text = "- $task",
+                    text = workExperience.companyInfo.description,
                     color = colorText,
-                    style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp)
+                    style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp),
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
-                if (index != workExperience.projectInfo.tasks.lastIndex) {
-                    Spacer(modifier = Modifier.height(10.dp))
+                workExperience.projectInfo.tasks.forEachIndexed { index, task ->
+                    Text(
+                        text = "- $task",
+                        color = colorText,
+                        style = MaterialTheme.typography.body1.copy(lineHeight = 24.sp)
+                    )
+                    if (index != workExperience.projectInfo.tasks.lastIndex) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
                 }
             }
         }
@@ -404,10 +422,7 @@ private fun WorkItemDivider() = Box(
 private fun PetProjectInfo() {
     Column {
         SectionTitle("Pet project")
-        WorkItem(
-            showDropDownArrow = false,
-            workExperience = PetProjectData
-        )
+        WorkItem(PetProjectData)
     }
 }
 
@@ -528,11 +543,12 @@ private fun SectionTitle(text: String) = Text(
  */
 @Composable
 private fun CompanyPositionEnrollDates(
-    showDropDownArrow: Boolean = true,
+    showWorkExperienceDetails: MutableState<Boolean>,
     companyName: String,
     position: String,
     details: Details
 ) {
+    val showDropDownArrow = details is Details.Dates
     val startPaddingFromArrow = if (showDropDownArrow) 16.dp else 0.dp
     val dropDownArrowContainerWidth = if (showDropDownArrow) 40.dp else 0.dp
     Row(
@@ -542,18 +558,25 @@ private fun CompanyPositionEnrollDates(
             .width(MAX_CONTENT_WIDTH + dropDownArrowContainerWidth + startPaddingFromArrow),
     ) {
         if (showDropDownArrow) {
+            val dropDownArrowRotationDegrees by animateFloatAsState(
+                targetValue = if (showWorkExperienceDetails.value) 180f else 0f
+            )
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(dropDownArrowContainerWidth)
                     .clip(CircleShape)
-                    .clickable {  }
+                    .clickable {
+                        showWorkExperienceDetails.value = !showWorkExperienceDetails.value
+                    }
             ) {
                 Image(
                     painter = painterResource(Res.drawable.ic_drop_down_arrow),
                     contentDescription = "Show or hide work experience details",
                     colorFilter = ColorFilter.tint(colorBackgroundLight),
-                    modifier = Modifier.size(dropDownArrowContainerWidth / 2)
+                    modifier = Modifier
+                        .size(dropDownArrowContainerWidth / 2)
+                        .rotate(dropDownArrowRotationDegrees)
                 )
             }
         }
