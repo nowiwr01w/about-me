@@ -19,6 +19,12 @@ ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "k
 compose-constraintLayout = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "compose-constraint" }
 
 ############
+### COIL ###
+############
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+
+############
 ### KOIN ###
 ############
 kotlin-date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "date-time" }
@@ -49,6 +55,11 @@ compose-constraint = "0.3.1"
 ### KOTLIN ###
 ##############
 date-time = "0.6.1"
+
+##############
+#### COIL ####
+##############
+coil = "3.0.0-rc01"
 
 ##############
 #### KOIN ####

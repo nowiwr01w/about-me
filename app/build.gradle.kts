@@ -50,6 +50,8 @@ kotlin {
                  * DEPENDENCIES
                  */
                 implementation(libs.kotlin.date.time)
+                implementation(libs.coil)
+                implementation(libs.coil.network)
                 implementation(libs.koin)
                 implementation(libs.koin.compose)
                 implementation(libs.coroutines)

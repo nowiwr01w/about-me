@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,6 +52,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.LocalPlatformContext
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import com.nowiwr01p.me.base.view_model.rememberViewModel
 import com.nowiwr01p.me.core_ui.extensions.appendLink
 import com.nowiwr01p.me.core_ui.extensions.onTextClick
@@ -423,7 +429,50 @@ private fun PetProjectInfo() {
     Column {
         SectionTitle("Pet project")
         WorkItem(PetProjectData)
+        PetProjectGallery()
     }
+}
+
+@Composable
+private fun PetProjectGallery() {
+    val itemsLink = remember {
+        buildList {
+            repeat(36) { // TODO: Move to UseCase
+                add("https://raw.githubusercontent.com/nowiwr01w/Protest/refs/heads/main/screenshots/${it + 1}.png")
+            }
+        }
+    }
+    LazyRow(
+        modifier = Modifier
+            .padding(top = 32.dp)
+            .fillMaxWidth()
+            .height(425.dp)
+    ) {
+        itemsIndexed(itemsLink) { index, item ->
+            PetProjectGalleryItem(item)
+            if (index != itemsLink.lastIndex) {
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun PetProjectGalleryItem(item: String) {
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalPlatformContext.current)
+            .data(item)
+            .build()
+    )
+    Image(
+        painter = painter,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxHeight()
+            .aspectRatio(0.45f)
+            .clip(MaterialTheme.shapes.small)
+    )
 }
 
 /**
